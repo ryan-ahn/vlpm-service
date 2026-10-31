@@ -1,0 +1,4 @@
+
+> @vlpm/partners@2.0.1 check-types
+> tsc --noEmit
+

@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+.expo/
+dist/
+credentials.json
+credentials/*.keystore
+npm-debug.log
+*.jsbundle
+.idea
+*.iml

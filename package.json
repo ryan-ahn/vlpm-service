@@ -1,0 +1,37 @@
+{
+  "name": "vlpm-service",
+  "private": true,
+  "scripts": {
+    "check-types": "turbo run check-types",
+    "check": "npm run check-types",
+    "start:vlpm": "npm run start --workspace=@vlpm/customer",
+    "start:vlpm:dev": "npm run start:dev --workspace=@vlpm/customer",
+    "start:partners": "npm run start --workspace=@vlpm/partners",
+    "start:partners:dev": "npm run start:dev --workspace=@vlpm/partners",
+    "build:vlpm:dev": "npm run build:dev --workspace=@vlpm/customer",
+    "build:vlpm": "npm run build:production --workspace=@vlpm/customer",
+    "submit:vlpm": "npm run submit --workspace=@vlpm/customer",
+    "build:partners:dev": "npm run build:dev --workspace=@vlpm/partners",
+    "build:partners": "npm run build:production --workspace=@vlpm/partners",
+    "submit:partners": "npm run submit --workspace=@vlpm/partners"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "turbo": "^2.10.12",
+    "typescript": "~6.0.3"
+  },
+  "packageManager": "npm@11.21.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": "^11.8.0"
+    }
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
