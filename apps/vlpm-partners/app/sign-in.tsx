@@ -8,15 +8,13 @@ import {
   View,
 } from "react-native";
 import { Redirect } from "expo-router";
-import { makeRedirectUri } from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAuth } from "@/lib/auth";
-import { OAuthCanceledError, signInWithGoogle } from "@/lib/oauth";
+import { logAuth, logAuthError } from "@/lib/auth-log";
+import { OAuthCanceledError, OAUTH_REDIRECT_URI, signInWithGoogle } from "@/lib/oauth";
 import { APP_NAME, PRIVACY_URL, TERMS_URL, colors } from "@/lib/theme";
-
-const REDIRECT_URL = makeRedirectUri({ native: "vlpm://sign-in" });
 
 export default function SignInScreen() {
   const { session, loading } = useAuth();
@@ -28,9 +26,12 @@ export default function SignInScreen() {
   const onGoogle = async () => {
     if (busy) return;
     setBusy(true);
+    logAuth("signInScreen.pressGoogle");
     try {
-      await signInWithGoogle(REDIRECT_URL);
+      const result = await signInWithGoogle(OAUTH_REDIRECT_URI);
+      logAuth("signInScreen.signInResolved", { userId: result.user.id });
     } catch (error) {
+      logAuthError("signInScreen.failed", error);
       if (!(error instanceof OAuthCanceledError)) {
         Alert.alert(
           "로그인 실패",

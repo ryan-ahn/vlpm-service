@@ -13,7 +13,9 @@
     "submit:vlpm": "npm run submit --workspace=@vlpm/customer",
     "build:partners:dev": "npm run build:dev --workspace=@vlpm/partners",
     "build:partners": "npm run build:production --workspace=@vlpm/partners",
-    "submit:partners": "npm run submit --workspace=@vlpm/partners"
+    "submit:partners": "npm run submit --workspace=@vlpm/partners",
+    "install:vlpm:android": "bash scripts/install-android-emulator.sh vlpm --latest",
+    "install:partners:android": "bash scripts/install-android-emulator.sh partners --latest"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
@@ -23,12 +25,6 @@
   "packageManager": "npm@11.21.0",
   "engines": {
     "node": ">=20"
-  },
-  "devEngines": {
-    "packageManager": {
-      "name": "npm",
-      "version": "^11.8.0"
-    }
   },
   "workspaces": [
     "apps/*",

@@ -1,7 +1,16 @@
+const oauthIntentFilter = {
+  action: "VIEW" as const,
+  data: [
+    { scheme: "vlpmp", host: "sign-in" },
+    { scheme: "vlpmp" },
+  ],
+  category: ["BROWSABLE", "DEFAULT"] as const,
+};
+
 const appConfig = {
   name: "VLPM Partners",
   slug: "vlpmp",
-  scheme: "vlpm",
+  scheme: "vlpmp",
   version: "2.0.1",
   orientation: "portrait" as const,
   icon: "./assets/icon.png",
@@ -26,6 +35,7 @@ const appConfig = {
       "android.permission.CAMERA",
       "android.permission.RECORD_AUDIO",
     ],
+    intentFilters: [oauthIntentFilter],
   },
   plugins: [
     "expo-dev-client",
@@ -54,7 +64,7 @@ const appConfig = {
   ],
   extra: {
     supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
-    supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+    supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     eas: {
       projectId: "c51a4d83-63e9-48e6-aeac-3d32f7e09663",
     },

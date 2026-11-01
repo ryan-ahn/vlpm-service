@@ -8,6 +8,8 @@ import {
   type ReactNode,
 } from "react";
 
+import { logAuth, logAuthError } from "@/lib/auth-log";
+import { env } from "@/lib/env";
 import { ROLE } from "@/lib/theme";
 import { supabase } from "@/lib/supabase";
 
@@ -54,15 +56,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     let mounted = true;
-    const apply = async (next: Session | null) => {
-      if (next) await ensureProfile(next);
+    logAuth("env.check", {
+      hasSupabaseUrl: Boolean(env.supabaseUrl),
+      hasSupabaseKey: Boolean(env.supabaseAnonKey),
+    });
+
+    const apply = async (next: Session | null, source: string) => {
       if (!mounted) return;
+      logAuth("apply", {
+        source,
+        hasSession: Boolean(next),
+        userId: next?.user.id ?? null,
+      });
       setSession(next);
       setLoading(false);
+      if (!next) return;
+      try {
+        await ensureProfile(next);
+        logAuth("ensureProfile.ok", { userId: next.user.id });
+      } catch (error) {
+        logAuthError("ensureProfile.failed", error);
+      }
     };
-    void supabase.auth.getSession().then(({ data }) => apply(data.session));
-    const { data } = supabase.auth.onAuthStateChange((_event, next) => {
-      void apply(next);
+
+    void supabase.auth.getSession().then(({ data, error }) => {
+      if (error) logAuthError("getSession.failed", error);
+      void apply(data.session, "getSession");
+    });
+    const { data } = supabase.auth.onAuthStateChange((event, next) => {
+      logAuth("onAuthStateChange", {
+        event,
+        hasSession: Boolean(next),
+        userId: next?.user.id ?? null,
+      });
+      void apply(next, `onAuthStateChange:${event}`);
     });
     return () => {
       mounted = false;
